@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import openModalAction from '../../actions/openModalAction';
 import SignUp from './SignUp';
 import axios from 'axios';
+import loginAction from '../../actions/loginAction';
+import swal from 'sweetalert';
 
 class Login extends Component{
 
@@ -16,13 +18,30 @@ class Login extends Component{
     changeEmail =(e) => this.setState({email: e.target.value});
     changePassword =(e) => this.setState({password: e.target.value});
 
-    submitLogin = (e) => {
+    submitLogin = async(e) => {
         e.preventDefault();
         const loginUrl = `${window.apiHost}/users/login`;
-        axios.post(loginUrl, this.state)
-            .then(response => {
-                console.log(response.data);
-            })
+        
+        const data = {
+            email: this.state.email,
+            password: this.state.password            
+        };
+        const response = await axios.post(loginUrl, data);
+        if(response.data.msg === "badPass" || response.data.msg === "noEmail" ){
+            swal({
+                title: "Access Denied",
+                text: "Invalid username or password.",
+                icon: "error",
+                dangerMode: true
+            });
+        } else if(response.data.msg === "loggedIn"){
+            swal({
+                title: "Success!",                
+                icon: "success"
+            });
+            // we call our registration action to update our auth reducer!!!
+            this.props.loginAction(response.data);
+        }   
     }
 
     render(){
@@ -45,14 +64,20 @@ class Login extends Component{
             </div>
         )
     }
-
 }
 
+
+function mapStateToProps(state){
+    return {
+        auth: state.auth
+    }
+}
 
 function mapDispatchToProps(dispatcher){
     return bindActionCreators({
-        openModal: openModalAction
+        openModal: openModalAction,
+        loginAction: loginAction
     }, dispatcher)
 }
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

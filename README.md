@@ -1,68 +1,95 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Routes used for first version:
+Base API URL - https://airbnb-api.robertbunch.dev
+/cities/recommended
 
-## Available Scripts
+/cities/:feature
 
-In the project directory, you can run:
+Available features:
+beach
+europe
+asia
+us
+exotic
+/city/:cityId
 
-### `npm start`
+/venues/recommended
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+/venues/superHost
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+/venue/:venueId
 
-### `npm test`
+/activities/today
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+/activities/:feature
 
-### `npm run build`
+scenery
+baking
+diving
+animals
+/activity/:id
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+/seach/:searchTerm
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+/points/get
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+/users/signup 
+    -- expects: email,password 
+    -- errors: 
+        {
+            msg: invalidData
+        } 
+        or 
+        {
+            msg: "userExists"
+        } 
 
-### `npm run eject`
+    -- success: 
+        { 
+            msg: "userAdded", 
+            token, 
+            email, 
+        }
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+/users/login 
+    -- expects: email, password 
+    -- errors: 
+        {
+            msg: "badPass"
+        } 
+        or 
+        {   
+            msg: "noEmail"
+        } 
+    -- badPass = valid username, but wrong passwrod 
+    -- noEmail = email is not registered 
+    -- success: 
+        { 
+            msg: "loggedIn", 
+            token, 
+            email 
+        }
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+/users/token-check 
+    -- expects: token 
+    -- errors: 
+        {
+            msg: "invalidToken"
+        } 
+    -- success: validatedToken
 
-## Learn More
+/venues/city/:cityName -- expects: cityName -- success: [venues]
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+/payment/create-session -- expects: venueData, totalPrice, diffDays, pricePerNight, checkIn, checkOut, token, numberOfGuest (default 2), currency (default: 'USD'), -- success: sessionVar (send it to Stripe for a checkout screen!) -- errors: {msg: "missingData"} -- success callback path: http://localhost:3000/payment-success/:token -- this is where Stripe is going to send the user after payment -- failure callback path: http://localhost:3000/payment-canceled/:token -- this is where Stripe is going to send the user if payment is canceled
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+/payment/success -- expects: stripToken (in url), token -- success: { reservationDetails: { checkIn, checkOut, currency, diffDays, iat, numberOfGuests, pricePerNight, totalPrice, venueData: { All data about this venue! }
+}, userData } -- errors: {msg: error} (error is an object)
 
-### Code Splitting
+/users/getBookings - expects: token (jwt) - success: [bookings] - errors: {msg:"badJwt"}
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+/reservation/cancel - expects: token (jwt), bid - success: {msg: "cancelled"} - error: {msg: "badId"}
 
-### Analyzing the Bundle Size
+/users/change-password - expects: token (jwt), newPassword, - success: {msg: "passUpdated"} - error: {msg: "badJwt"}
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+/search/:searchTerm will respond with: { venues: [], cities: [], activities: [], }
