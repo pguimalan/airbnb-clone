@@ -1,20 +1,22 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import NavBar from './utility/NavBar/NavBar';
 import Home from './pages/Home/Home'
+import NavBar from './utility/NavBar/NavBar'
+import SingleFullVenue from './pages/SingleVenue/SingleFullVenue';
+import Modal from './utility/Modal/Modal';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        
-          <Router>
-            <Route path="/" component={NavBar} />
-            <Route exact path="/" component={Home} />
-        </Router>
-      </div>
-    ) 
+      <Router>
+        <Route path="/" component={NavBar} />
+        <Route exact path="/" component={Home} />
+        <Route exact path="/venue/:vid" component={SingleFullVenue} />
+        <Route path="/" component={Modal} />
+      </Router>
+    )
   }
 }
 
-export default App;
+export default App
+ 
