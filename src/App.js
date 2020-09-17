@@ -4,6 +4,7 @@ import Home from './pages/Home/Home'
 import NavBar from './utility/NavBar/NavBar'
 import SingleFullVenue from './pages/SingleVenue/SingleFullVenue';
 import Modal from './utility/Modal/Modal';
+import './App.css';
 
 class App extends Component {
   render() {

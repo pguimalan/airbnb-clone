@@ -31,8 +31,8 @@ const persistor = persistStore(theStore);
 
 ReactDOM.render(
   <Provider store={theStore}>
-    <PersistGate loading={Spinner} persistor={persistor}>
-      <App />
+    <PersistGate persistor={persistor}>
+      <App loading={Spinner} />
     </PersistGate>
   </Provider>,
   document.getElementById('root')
