@@ -79,9 +79,29 @@ animals
         } 
     -- success: validatedToken
 
-/venues/city/:cityName -- expects: cityName -- success: [venues]
+/venues/city/:cityName 
+    -- expects: cityName 
+    -- success: [venues]
 
-/payment/create-session -- expects: venueData, totalPrice, diffDays, pricePerNight, checkIn, checkOut, token, numberOfGuest (default 2), currency (default: 'USD'), -- success: sessionVar (send it to Stripe for a checkout screen!) -- errors: {msg: "missingData"} -- success callback path: http://localhost:3000/payment-success/:token -- this is where Stripe is going to send the user after payment -- failure callback path: http://localhost:3000/payment-canceled/:token -- this is where Stripe is going to send the user if payment is canceled
+/payment/create-session 
+    -- expects: 
+            venueData, 
+            totalPrice, 
+            diffDays, 
+            pricePerNight, 
+            checkIn, 
+            checkOut, 
+            token, 
+            numberOfGuest (default 2), 
+            currency (default: 'USD'), 
+    -- success: 
+        sessionVar (send it to Stripe for a checkout screen!) 
+    -- errors: 
+        {msg: "missingData"} 
+    -- success callback path: http://localhost:3000/payment-success/:token 
+        -- this is where Stripe is going to send the user after payment 
+    -- failure callback path: http://localhost:3000/payment-canceled/:token 
+        -- this is where Stripe is going to send the user if payment is canceled
 
 /payment/success -- expects: stripToken (in url), token -- success: { reservationDetails: { checkIn, checkOut, currency, diffDays, iat, numberOfGuests, pricePerNight, totalPrice, venueData: { All data about this venue! }
 }, userData } -- errors: {msg: error} (error is an object)

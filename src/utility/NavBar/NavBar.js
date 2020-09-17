@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './NavBar.css';
+import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -37,7 +38,7 @@ class NavBar extends Component {
                                     this.props.auth.email
                                     ?
                                     <>
-                                        <li className="login-signup">Hello, {this.props.auth.email}</li>
+                                        <li className="login-signup"><Link to="/account">Hello, {this.props.auth.email}</Link> </li>
                                         <li className="login-signup" onClick={() => this.props.logoutAction()}>Logout</li>
                                     </>
                                     : 
